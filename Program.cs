@@ -1,4 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Palka.Areas.Identity.Data;
+using Palka.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("UserContextConnection") ?? throw new InvalidOperationException("Connection string 'UserContextConnection' not found.");
+
+builder.Services.AddDbContext<UserContext>(options =>
+    options.UseSqlServer(connectionString));;
+
+builder.Services.AddDefaultIdentity<PalkaUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<UserContext>();;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -17,11 +29,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
+
 
 app.Run();
