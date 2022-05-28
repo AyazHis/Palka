@@ -9,7 +9,7 @@ var connectionString = builder.Configuration.GetConnectionString("UserContextCon
 builder.Services.AddDbContext<UserContext>(options =>
     options.UseSqlServer(connectionString));;
 
-builder.Services.AddDefaultIdentity<PalkaUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<PalkaUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<UserContext>();;
 
 // Add services to the container.
